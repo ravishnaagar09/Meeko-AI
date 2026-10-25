@@ -1,0 +1,102 @@
+{% extends "app_base.html" %}
+{% from "_macros.html" import avatar, icon %}
+{% set active = 'profile' %}
+{% block title %}Edit profile{% endblock %}
+{% block heading %}Edit profile{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>Edit your profile</h1>
+    <p>Your email stays the same. Leave the picture box empty to keep your current picture.</p>
+  </div>
+</div>
+
+<form class="card edit-form" method="post" action="/profile/edit" enctype="multipart/form-data" novalidate>
+  <input type="hidden" name="csrf" value="{{ csrf }}">
+
+  <div class="avatar-edit">
+    <div id="avatarPreview">{{ avatar(avatar_url, initials, "lg") }}</div>
+    <div class="field grow">
+      <label for="avatar">Profile picture</label>
+      <input type="file" id="avatar" name="avatar" accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp"
+             aria-describedby="avatar-hint{% if errors.avatar %} err-avatar{% endif %}"
+             {% if errors.avatar %}aria-invalid="true"{% endif %}>
+      <p class="hint" id="avatar-hint">PNG, JPG or WEBP, up to 2 MB. It is cropped to a square.</p>
+      <p class="field-error" id="err-avatar" {% if not errors.avatar %}hidden{% endif %}>{{ errors.avatar }}</p>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="full_name">Full name</label>
+    <input type="text" id="full_name" name="full_name" value="{{ values.full_name or '' }}" required maxlength="80" autocomplete="name"
+           {% if errors.full_name %}aria-invalid="true" aria-describedby="err-name"{% endif %}>
+    {% if errors.full_name %}<p class="field-error" id="err-name">{{ errors.full_name }}</p>{% endif %}
+  </div>
+
+  <div class="field">
+    <label for="email_ro">Email</label>
+    <input type="email" id="email_ro" value="{{ user.email }}" disabled aria-describedby="email-hint">
+    <p class="hint" id="email-hint">Email can't be changed here.</p>
+  </div>
+
+  <div class="two-fields">
+    <div class="field">
+      <label for="college">College</label>
+      <input type="text" id="college" name="college" value="{{ values.college or '' }}" maxlength="100" placeholder="e.g. Delhi University"
+             {% if errors.college %}aria-invalid="true" aria-describedby="err-college"{% endif %}>
+      {% if errors.college %}<p class="field-error" id="err-college">{{ errors.college }}</p>{% endif %}
+    </div>
+    <div class="field">
+      <label for="course">Course</label>
+      <input type="text" id="course" name="course" value="{{ values.course or '' }}" maxlength="100" placeholder="e.g. B.Sc Computer Science"
+             {% if errors.course %}aria-invalid="true" aria-describedby="err-course"{% endif %}>
+      {% if errors.course %}<p class="field-error" id="err-course">{{ errors.course }}</p>{% endif %}
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="bio">Bio</label>
+    <textarea id="bio" name="bio" rows="4" maxlength="500" placeholder="A few words about you and what you are studying."
+              {% if errors.bio %}aria-invalid="true" aria-describedby="err-bio"{% endif %}>{{ values.bio or '' }}</textarea>
+    <p class="hint"><span id="bioCount">0</span> / 500</p>
+    {% if errors.bio %}<p class="field-error" id="err-bio">{{ errors.bio }}</p>{% endif %}
+  </div>
+
+  <div class="form-actions">
+    <button class="btn" type="submit">Save changes</button>
+    <a class="btn secondary" href="/profile">Cancel</a>
+  </div>
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  (function () {
+    var MAX = 2 * 1024 * 1024, OK = ["image/png", "image/jpeg", "image/webp"];
+    var input = document.getElementById("avatar"), preview = document.getElementById("avatarPreview");
+    var err = document.getElementById("err-avatar");
+    var original = preview.innerHTML;
+
+    function showError(msg) { err.textContent = msg; err.hidden = !msg; }
+
+    input.addEventListener("change", function () {
+      showError("");
+      var f = input.files[0];
+      if (!f) { preview.innerHTML = original; return; }
+      if (OK.indexOf(f.type) === -1) { input.value = ""; preview.innerHTML = original; return showError("Please choose a PNG, JPG or WEBP image."); }
+      if (f.size > MAX) { input.value = ""; preview.innerHTML = original; return showError("That picture is larger than 2 MB."); }
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var img = document.createElement("img");
+        img.className = "avatar lg"; img.alt = "New profile picture preview"; img.src = e.target.result;
+        preview.replaceChildren(img);
+      };
+      reader.readAsDataURL(f);
+    });
+
+    var bio = document.getElementById("bio"), count = document.getElementById("bioCount");
+    function upd() { count.textContent = bio.value.length; }
+    bio.addEventListener("input", upd); upd();
+  })();
+</script>
+{% endblock %}

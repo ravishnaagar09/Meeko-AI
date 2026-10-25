@@ -1,0 +1,62 @@
+.job-tray[hidden] { display: none; }
+
+.job-tray {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 70;
+  display: grid;
+  gap: 8px;
+  width: min(380px, calc(100vw - 32px));
+}
+
+.job {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto; /* icon | text | action | close */
+  align-items: start;
+  column-gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--navy-900);
+  color: #fff;
+  box-shadow: 0 6px 20px rgba(10, 31, 58, .3);
+  font-size: .92rem;
+  animation: toast-in .2s ease-out;
+}
+.job.error { background: var(--bad); }
+
+.job .spinner {
+  width: 16px;
+  height: 16px;
+  margin-top: 3px;
+  border-color: rgba(255, 255, 255, .3);
+  border-top-color: #ffb27a;
+}
+.job .ic { margin-top: 3px; }
+
+.job-text {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.job .link {
+  color: #ffb27a;
+  white-space: nowrap;
+  align-self: center;
+  font-weight: 700;
+}
+
+.job-x {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: inherit;
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.job-x:hover,
+.job-x:focus-visible { background: rgba(255, 255, 255, .14); }

@@ -1,0 +1,129 @@
+/* Marginalia theme: dark mode, the theme toggle button and the greeting line.
+   Load this AFTER style.css and auth.css. Nothing in those files needs to change. */
+
+:root { --surface: #ffffff; }
+
+/* ---------- dark palette ---------- */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --surface: #11233b;
+  --ink: #e8eef8;
+  --gray-50: #0a1525;
+  --gray-100: #182b44;
+  --gray-200: #28405f;
+  --gray-400: #7a92b0;
+  --gray-600: #9db0c9;
+  --teal-50: #2a1810;
+  --teal-100: #3a2112;
+  --teal-200: #7a3d17;
+  --bad-bg: #3b1a22;
+  --mid-bg: #3a3013;
+  --ok: #7be0a6;
+  --ok-bg: #14301f;
+}
+
+/* cards, bars and inputs that were white */
+:root[data-theme="dark"] .skip,
+:root[data-theme="dark"] .topbar,
+:root[data-theme="dark"] .doc-picker select,
+:root[data-theme="dark"] .card,
+:root[data-theme="dark"] .btn.secondary,
+:root[data-theme="dark"] .btn.danger,
+:root[data-theme="dark"] .field input[type="text"],
+:root[data-theme="dark"] .field input[type="search"],
+:root[data-theme="dark"] .field input[type="email"],
+:root[data-theme="dark"] .field input[type="password"],
+:root[data-theme="dark"] .field input[type="file"],
+:root[data-theme="dark"] .field textarea,
+:root[data-theme="dark"] .search input,
+:root[data-theme="dark"] .empty,
+:root[data-theme="dark"] .stat,
+:root[data-theme="dark"] .rows,
+:root[data-theme="dark"] .drop,
+:root[data-theme="dark"] .panel,
+:root[data-theme="dark"] .seg button[aria-pressed="true"],
+:root[data-theme="dark"] .composer,
+:root[data-theme="dark"] .chip,
+:root[data-theme="dark"] .choice,
+:root[data-theme="dark"] .seg-radio span,
+:root[data-theme="dark"] .fb-row input[type="text"],
+:root[data-theme="dark"] .auth-card { background: var(--surface); }
+
+/* text that was dark navy on a white card */
+:root[data-theme="dark"] .btn.secondary,
+:root[data-theme="dark"] .icon-btn,
+:root[data-theme="dark"] .link:hover,
+:root[data-theme="dark"] .stat b,
+:root[data-theme="dark"] .seg button[aria-pressed="true"],
+:root[data-theme="dark"] .score-big,
+:root[data-theme="dark"] .slip blockquote { color: var(--ink); }
+:root[data-theme="dark"] .src { color: #b9cce6; }
+:root[data-theme="dark"] mark.hl { color: #fff; }
+
+/* orange text (links, tags) needs a lighter orange on dark */
+:root[data-theme="dark"] .link,
+:root[data-theme="dark"] .tag.teal,
+:root[data-theme="dark"] details.evidence summary,
+:root[data-theme="dark"] .switch-line a,
+:root[data-theme="dark"] .auth-card a:not(.btn),
+:root[data-theme="dark"] .pw-toggle,
+:root[data-theme="dark"] .profile-sub,
+:root[data-theme="dark"] .greeting,
+:root[data-theme="dark"] .drop .ic { color: #ffa970; }
+
+/* error (red) and warning (yellow) text */
+:root[data-theme="dark"] .btn.danger,
+:root[data-theme="dark"] .alert,
+:root[data-theme="dark"] .score-pill.low,
+:root[data-theme="dark"] .result.err,
+:root[data-theme="dark"] .verdict.bad,
+:root[data-theme="dark"] .field-error { color: #ff9db3; }
+:root[data-theme="dark"] .alert.info,
+:root[data-theme="dark"] .score-pill.mid,
+:root[data-theme="dark"] .msg.bot.not_found,
+:root[data-theme="dark"] .msg.bot.unreadable,
+:root[data-theme="dark"] .missing,
+:root[data-theme="dark"] .verdict.mid { color: #f3d27a; }
+:root[data-theme="dark"] .msg.bot.not_found,
+:root[data-theme="dark"] .msg.bot.unreadable { border-color: #5c4d1c; }
+:root[data-theme="dark"] .msg.bot.not_found .fb-row,
+:root[data-theme="dark"] .msg.bot.unreadable .fb-row { border-top-color: #5c4d1c; }
+
+/* selected states that would blend into the dark background */
+:root[data-theme="dark"] .seg-radio input:checked + span { background: #b8431a; border-color: #b8431a; color: #fff; }
+:root[data-theme="dark"] .btn { background: #b8431a; }
+:root[data-theme="dark"] .btn:hover { background: #9c3512; }
+:root[data-theme="dark"] .btn.secondary,
+:root[data-theme="dark"] .btn.danger { background: var(--surface); }
+:root[data-theme="dark"] .btn.secondary:hover { background: var(--gray-100); }
+:root[data-theme="dark"] .btn.danger:hover { background: var(--bad-bg); }
+:root[data-theme="dark"] .btn.navy { background: var(--navy-700); }
+:root[data-theme="dark"] .btn.navy:hover { background: var(--navy-800); }
+:root[data-theme="dark"] .msg.user { background: var(--navy-700); }
+:root[data-theme="dark"] .sidebar { background: #07121f; }
+
+/* ---------- theme toggle button ---------- */
+.theme-toggle {
+  display: inline-flex; align-items: center; justify-content: center; flex: none;
+  width: 40px; height: 40px; border-radius: 50%; cursor: pointer;
+  border: 1px solid var(--gray-200); background: var(--surface); color: var(--ink);
+  transition: background .15s, border-color .15s;
+}
+.theme-toggle:hover { border-color: var(--teal-500); background: var(--teal-50); }
+.theme-toggle .sun { display: none; }
+:root[data-theme="dark"] .theme-toggle .sun { display: inline; }
+:root[data-theme="dark"] .theme-toggle .moon { display: none; }
+.topbar .theme-toggle { margin-left: auto; }
+.topbar .status ~ .theme-toggle { margin-left: 12px; }
+.topbar .theme-toggle + .topbar-user { margin-left: 8px; }
+.auth-body .theme-toggle { position: fixed; top: 14px; right: 14px; z-index: 20; }
+
+/* smooth colour change, only while the user is switching (and never for reduced-motion users) */
+@media (prefers-reduced-motion: no-preference) {
+  html.theme-anim *, html.theme-anim *::before, html.theme-anim *::after {
+    transition: background-color .25s, color .25s, border-color .25s !important;
+  }
+}
+
+/* ---------- greeting ---------- */
+.greeting { margin: 0 0 6px; font-weight: 700; color: var(--teal-700); font-size: .95rem; }

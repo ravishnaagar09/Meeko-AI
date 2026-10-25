@@ -1,0 +1,49 @@
+{% extends "app_base.html" %}
+{% from "_macros.html" import avatar, icon %}
+{% set active = 'profile' %}
+{% block title %}My profile{% endblock %}
+{% block heading %}My profile{% endblock %}
+{% block content %}
+<div class="card profile-head">
+  {{ avatar(avatar_url, initials, "lg") }}
+  <div class="profile-id">
+    <h1>{{ user.full_name }}</h1>
+    <p class="muted">{{ user.email }}</p>
+    {% if user.college or user.course %}
+    <p class="profile-sub">{{ user.course }}{% if user.course and user.college %} · {% endif %}{{ user.college }}</p>
+    {% endif %}
+  </div>
+  <a class="btn" href="/profile/edit">{{ icon("edit") }}Edit Profile</a>
+</div>
+
+{% if not user.college and not user.course and not user.bio %}
+<div class="alert info" role="note">Your profile is almost empty. Add your college, course and a short bio so it feels like yours.</div>
+{% endif %}
+
+<div class="card detail-grid">
+  <div class="detail">
+    <span class="detail-label">Full name</span>
+    <span class="detail-value">{{ user.full_name }}</span>
+  </div>
+  <div class="detail">
+    <span class="detail-label">Email</span>
+    <span class="detail-value">{{ user.email }}</span>
+  </div>
+  <div class="detail">
+    <span class="detail-label">College</span>
+    <span class="detail-value {% if not user.college %}empty-value{% endif %}">{{ user.college or "Not added yet" }}</span>
+  </div>
+  <div class="detail">
+    <span class="detail-label">Course</span>
+    <span class="detail-value {% if not user.course %}empty-value{% endif %}">{{ user.course or "Not added yet" }}</span>
+  </div>
+  <div class="detail wide">
+    <span class="detail-label">Bio</span>
+    <span class="detail-value bio {% if not user.bio %}empty-value{% endif %}">{{ user.bio or "Not added yet" }}</span>
+  </div>
+  <div class="detail">
+    <span class="detail-label">Member since</span>
+    <span class="detail-value">{{ user.created_at[:10] }}</span>
+  </div>
+</div>
+{% endblock %}
