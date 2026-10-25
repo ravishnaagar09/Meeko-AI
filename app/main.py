@@ -113,6 +113,11 @@ def save_document(filename: str, ex: extract.Extracted, user_id: int) -> dict:
 
 @app.get("/api/health")
 def health():
+    try:
+        with db() as c:
+            c.execute("SELECT 1").fetchone()
+    except Exception as e:
+        raise HTTPException(503, f"database error: {e}")
     return {"ok": True, "gemini_configured": llm.configured(), "model": config.GEMINI_MODEL, "max_upload_mb": config.MAX_UPLOAD_MB}
 
 
