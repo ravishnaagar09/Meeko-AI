@@ -69,7 +69,8 @@ async function api(path, opts = {}) {
   let r;
   try {
     r = await fetch("/api" + path, o);
-  } catch {
+  } catch (e) {
+    if (e && e.name === "AbortError") throw new Error("This is taking too long. Try fewer questions or a shorter topic.");
     throw new Error("Can't reach the server. Check that it is running and try again.");
   }
   if (r.status === 401) {
@@ -509,7 +510,7 @@ async function viewStudy(root) {
     log.append(JOBS.thinking("Searching your notes…"));
     scroll();
     JOBS.start("chat", docId, "Your question in Ask your notes",
-      () => api(`/documents/${docId}/chat`, { json: { message: q } }),
+      (signal) => api(`/documents/${docId}/chat`, { json: { message: q }, signal }),
       {
         payload: q,
         isHere: () => S.route === "study" && S.docId === docId,
@@ -634,9 +635,16 @@ async function viewQuiz(root) {
   const doc = curDoc();
   const busy = doc ? JOBS.running("quiz", doc.id) : null;
   if (busy) {
+    const cancel = h("button", { class: "btn secondary", type: "button" }, "Cancel");
+    cancel.addEventListener("click", () => {
+      JOBS.cancel(busy);
+      render();
+    });
     root.replaceChildren(
       h("div", { class: "page-head" }, h("div", {}, h("h1", {}, "Practice quiz"), h("p", {}, "Writing questions from “" + doc.filename + "”…"))),
-      h("div", { class: "card quiz-wrap" }, loading("Writing questions from your notes and checking each one against them. You can open other pages meanwhile; your quiz will open here when it is ready."))
+      h("div", { class: "card quiz-wrap" },
+        loading("Writing questions from your notes. This can take up to a few minutes."),
+        h("div", { style: "margin-top:16px" }, cancel))
     );
     return;
   }
@@ -663,8 +671,8 @@ async function viewQuiz(root) {
     const difficulty = root.querySelector('input[name="diff"]:checked').value;
     const n = Number(count.value);
     const topicText = topic.value.trim();
-    JOBS.start("quiz", doc.id, "Quiz from " + doc.filename,
-      () => api(`/documents/${doc.id}/quiz`, { json: { difficulty, count: n, types, topic: topicText } }),
+    const job = JOBS.start("quiz", doc.id, "Quiz from " + doc.filename,
+      (signal) => api(`/documents/${doc.id}/quiz`, { json: { difficulty, count: n, types, topic: topicText }, signal }),
       {
         dedupe: true,
         isHere: () => S.route === "quiz",
@@ -677,6 +685,8 @@ async function viewQuiz(root) {
         open: (q) => { S.quiz = quizState(doc, q); go("quiz"); },
         openLabel: "Open quiz",
       });
+    // Stop waiting after 5 minutes. The tray then shows the job as failed.
+    setTimeout(() => { if (job.status === "running") job.controller.abort(); }, 300000);
     render();
   });
   root.replaceChildren(
