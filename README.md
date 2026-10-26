@@ -1,6 +1,6 @@
-# Study Companion — AI-Powered Study Assistant
+# Meeko — AI-Powered Study Assistant
 
-Study Companion is a web application that helps students study from their own notes. It combines a FastAPI backend, a browser-based interface, SQLite storage, and Google's GenAI API for note-grounded answers and study assistance.
+Meeko is a web application that helps students study from their own notes. It combines a FastAPI backend, a browser-based interface, SQLite storage, and Google's GenAI API for note-grounded answers and study assistance.
 
 ## Key Features
 
@@ -31,7 +31,7 @@ Study Companion is a web application that helps students study from their own no
 ## Project Structure
 
 ```text
-study-companion/
+Meeko/
 ├── app/
 │   ├── main.py          # FastAPI application and API routes
 │   ├── auth.py          # Authentication helpers
@@ -77,7 +77,7 @@ In Command Prompt, move to the folder that contains `app`, `static`, `templates`
 Example:
 
 ```bat
-cd /d "C:\path\to\study-companion"
+cd /d "C:\path\to\Meeko"
 ```
 
 Replace the example path with your actual project location.
@@ -113,7 +113,7 @@ GEMINI_API_KEY=PASTE_YOUR_OWN_API_KEY_HERE
 GEMINI_MODEL=YOUR_SUPPORTED_MODEL_NAME
 GEMINI_FALLBACK_MODELS=
 MAX_UPLOAD_MB=15
-DB_PATH=studycompanion.db
+DB_PATH=Meeko.db
 SECRET_KEY=REPLACE_WITH_A_RANDOM_SECRET
 VERIFY_ANSWERS=true
 SESSION_HTTPS_ONLY=false
@@ -236,7 +236,7 @@ Check the extracted-text preview and compare it with the original scan. Clear im
 Before publishing or submitting this project:
 
 - Never include `.env`, real API keys, or real secret keys in a ZIP or public repository.
-- Never include your personal `studycompanion.db` file or real users' data in a public submission.
+- Never include your personal `Meeko.db` file or real users' data in a public submission.
 - Remove `.venv/` and `__pycache__/` from the submission ZIP; they can be recreated.
 - Keep `.env.example` limited to placeholder values.
 - Use HTTPS and set `SESSION_HTTPS_ONLY=true` in production.
