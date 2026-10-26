@@ -1,4 +1,4 @@
-## Meeko — AI-Powered Study Assistant
+# Study Companion — AI-Powered Study Assistant
 
 Meeko is a web application that helps students study from their own notes. It combines a FastAPI backend, a browser-based interface, SQLite storage, and Google's GenAI API for note-grounded answers and study assistance.
 
